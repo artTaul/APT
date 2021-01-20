@@ -1,12 +1,16 @@
 package com.zwt.apt_processor;
 
+import com.google.gson.Gson;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.processing.Messager;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Elements;
+import javax.tools.Diagnostic;
 
 public class ClassTemplate {
     public static final String SUFFIX_STR = "_ViewBinding";
@@ -36,7 +40,8 @@ public class ClassTemplate {
         mVariableElementMap.put(id, element);
     }
 
-    public String generateJavaCode() {
+    public String generateJavaCode(Messager messager) {
+        messager.printMessage(Diagnostic.Kind.NOTE, "---生成代码--------------------------------\n");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("package ").append(mPackageName).append(";\n");
         stringBuilder.append('\n');
@@ -44,6 +49,8 @@ public class ClassTemplate {
         generateBindViewMethods(stringBuilder);
         stringBuilder.append('\n');
         stringBuilder.append("}\n");
+        messager.printMessage(Diagnostic.Kind.NOTE, stringBuilder.toString());
+        messager.printMessage(Diagnostic.Kind.NOTE, "---生成代码结束------------------------------\n");
         return stringBuilder.toString();
     }
 
